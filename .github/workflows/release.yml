@@ -7,6 +7,9 @@ on:
 
 jobs:
   publish:
+    # Fork guard: only the upstream repo publishes. Dependent jobs (mcp-registry,
+    # docker, mcpb) need this job, so they are skipped on forks as well.
+    if: github.repository == 'cubinet-code/paperless-ngx-mcp'
     runs-on: ubuntu-latest
     permissions:
       contents: write
