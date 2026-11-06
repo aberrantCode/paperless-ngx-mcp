@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows [SemVer](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **`npm test` ran no tests on Windows.** The `test` and `test:e2e` scripts quoted their glob with single quotes, which `cmd.exe` (npm's script shell on Windows) passes through literally, so Node matched no files and exited 0. The globs now use double quotes, which work in `cmd.exe` and POSIX shells; Node's test runner expands the glob itself.
+
 ## [3.2.1] — 2026-10-01
 
 Safer tag edits and fewer calls when an agent files or reads documents. Tested against **Paperless-ngx 3.2.1**, the latest Paperless release. No breaking changes: every new parameter is optional.
