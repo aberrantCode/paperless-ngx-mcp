@@ -18,6 +18,7 @@ All notable changes to this project are documented here. Format follows [Keep a 
   - `zod` `4.4.3` → `4.6.7` (high: memory exhaustion while validating oversized constrained collections).
   - `express-rate-limit`'s `ip-address` `10.5.0` → `10.7.6` (moderate: SSRF/trust-boundary bypasses and stalls on long input) and `fast-uri` `3.1.8` → `3.1.9` (moderate).
 - On a loopback bind, `--http` refuses requests whose `Host` header isn't `localhost`, `127.0.0.1` or `[::1]` (HTTP 403). This blocks DNS-rebinding attacks from a browser on the same machine. It uses the MCP SDK's own `localhostHostValidation` middleware.
+- **Upload paths can be limited to chosen directories.** `post_document` and `upload_document_version` read any absolute path the server can open, so instructions hidden in document text could get the assistant to upload a private file such as an SSH key. The new `PAPERLESS_UPLOAD_DIRS` (or `--uploadDirs`) lists the directories paths may come from, separated by `:` (`;` on Windows); `none` turns path reads off. Paths are resolved through symlinks and `..` before the check. Base64 uploads are unaffected. Unset, behaviour is unchanged (any path) — setting it is recommended; see the README's Security section.
 - `npm audit` is clean.
 
 ## [3.2.1] — 2026-10-01

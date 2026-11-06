@@ -4,6 +4,7 @@ import { parseArgs } from "node:util";
 import { PaperlessAPI } from "./api/PaperlessAPI";
 import { createHttpApp, DEFAULT_HTTP_HOST } from "./httpApp";
 import { createServer } from "./server";
+import { parseUploadDirs } from "./tools/utils/fileInput";
 
 const {
   values: {
@@ -15,6 +16,7 @@ const {
     publicUrl,
     maxSessions,
     sessionIdleMinutes,
+    uploadDirs,
   },
 } = parseArgs({
   options: {
@@ -26,6 +28,7 @@ const {
     publicUrl: { type: "string", default: "" },
     maxSessions: { type: "string" },
     sessionIdleMinutes: { type: "string" },
+    uploadDirs: { type: "string" },
   },
   allowPositionals: true,
 });
@@ -34,6 +37,10 @@ const resolvedBaseUrl = baseUrl || process.env.PAPERLESS_URL;
 const resolvedToken = token || process.env.PAPERLESS_API_KEY;
 const resolvedPublicUrl =
   publicUrl || process.env.PAPERLESS_PUBLIC_URL || resolvedBaseUrl;
+// Unset keeps the old behaviour (any absolute path); `none` turns path reads off.
+const resolvedUploadDirs = parseUploadDirs(
+  uploadDirs || process.env.PAPERLESS_UPLOAD_DIRS
+);
 const resolvedPort = port ? parseInt(port, 10) : 3000;
 // Loopback by default: the HTTP transport has no authentication.
 const resolvedHost =
@@ -54,7 +61,7 @@ const resolvedIdleMinutes = positiveNumber(
 
 if (!resolvedBaseUrl || !resolvedToken) {
   console.error(
-    "Usage: paperless-ngx-mcp --baseUrl <url> --token <token> [--http] [--port <port>] [--host <address>] [--publicUrl <url>]"
+    "Usage: paperless-ngx-mcp --baseUrl <url> --token <token> [--http] [--port <port>] [--host <address>] [--publicUrl <url>] [--uploadDirs <dirs>|none]"
   );
   console.error(
     "Or set PAPERLESS_URL and PAPERLESS_API_KEY environment variables."
@@ -69,6 +76,7 @@ async function main() {
     const { app, shutdown } = createHttpApp({
       api,
       publicUrl: resolvedPublicUrl,
+      uploadDirs: resolvedUploadDirs,
       maxSessions: resolvedMaxSessions,
       host: resolvedHost,
       sessionIdleTimeoutMs: resolvedIdleMinutes
@@ -89,7 +97,7 @@ async function main() {
       );
     });
   } else {
-    const server = createServer(api, resolvedPublicUrl);
+    const server = createServer(api, resolvedPublicUrl, resolvedUploadDirs);
     const transport = new StdioServerTransport();
     await server.connect(transport);
   }
