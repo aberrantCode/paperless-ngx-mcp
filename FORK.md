@@ -14,9 +14,9 @@ publish to npm, the MCP Registry or GHCR: `release.yml` only runs its publish jo
 
 | Branch | What it does | Upstream PR |
 | --- | --- | --- |
-| `fix/audit-deps` | `npm audit fix` for all production advisories; raises minimum versions of the affected direct dependencies. | _not yet opened_ |
-| `fix/http-bind-localhost` | `--http` binds `127.0.0.1` by default (`--host` / `PAPERLESS_MCP_HOST` to change; Docker image sets `0.0.0.0`); DNS-rebinding `Host` check on loopback. | _not yet opened_ |
-| `feat/upload-path-allowlist` | `PAPERLESS_UPLOAD_DIRS` / `--uploadDirs` limits which server-local paths the upload tools may read (`none` disables path reads; unset keeps upstream behaviour). | _not yet opened_ |
+| `fix/audit-deps` | `npm audit fix` for all production advisories; raises minimum versions of the affected direct dependencies. | [cubinet-code#7](https://github.com/cubinet-code/paperless-ngx-mcp/pull/7) |
+| `fix/http-bind-localhost` | `--http` binds `127.0.0.1` by default (`--host` / `PAPERLESS_MCP_HOST` to change; Docker image sets `0.0.0.0`); DNS-rebinding `Host` check on loopback. | [cubinet-code#8](https://github.com/cubinet-code/paperless-ngx-mcp/pull/8) |
+| `feat/upload-path-allowlist` | `PAPERLESS_UPLOAD_DIRS` / `--uploadDirs` limits which server-local paths the upload tools may read (`none` disables path reads; unset keeps upstream behaviour). | [cubinet-code#9](https://github.com/cubinet-code/paperless-ngx-mcp/pull/9) |
 | `chore/fork-dependabot` | Dependabot config, `npm audit` step in CI, and a `github.repository` guard so the release workflow never publishes from the fork. | fork-only |
 
 Fork-only commits directly on `main` (not intended for upstream):
