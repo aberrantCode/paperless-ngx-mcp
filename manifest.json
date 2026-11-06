@@ -1,8 +1,8 @@
 {
   "manifest_version": "0.3",
   "name": "paperless-ngx-mcp",
-  "display_name": "Paperless-ngx",
-  "version": "3.2.1",
+  "display_name": "Paperless-ngx (aberrantCode fork)",
+  "version": "3.2.1-fork.1",
   "description": "Search, tag, edit and upload documents in your Paperless-ngx instance.",
   "long_description": "Exposes the Paperless-ngx REST API to Claude: documents and their versions, tags, correspondents, document types, custom fields, storage paths, saved views, workflows, mail accounts and rules, share links and bundles, notes, trash and tasks. Includes a `triage_inbox` prompt that proposes metadata for inbox documents and applies it after you confirm.",
   "author": {
@@ -11,10 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cubinet-code/paperless-ngx-mcp"
+    "url": "https://github.com/aberrantCode/paperless-ngx-mcp"
   },
-  "homepage": "https://github.com/cubinet-code/paperless-ngx-mcp",
-  "support": "https://github.com/cubinet-code/paperless-ngx-mcp/issues",
+  "homepage": "https://github.com/aberrantCode/paperless-ngx-mcp",
+  "support": "https://github.com/aberrantCode/paperless-ngx-mcp/issues",
   "license": "ISC",
   "keywords": ["paperless", "paperless-ngx", "documents", "dms", "ocr"],
   "server": {
@@ -25,7 +25,8 @@
       "args": ["${__dirname}/build/index.js"],
       "env": {
         "PAPERLESS_URL": "${user_config.paperless_url}",
-        "PAPERLESS_API_KEY": "${user_config.paperless_api_key}"
+        "PAPERLESS_API_KEY": "${user_config.paperless_api_key}",
+        "PAPERLESS_UPLOAD_DIRS": "${user_config.upload_dirs}"
       }
     }
   },
@@ -42,6 +43,13 @@
       "description": "In Paperless-ngx: your username (top right) → My Profile → generate token.",
       "sensitive": true,
       "required": true
+    },
+    "upload_dirs": {
+      "type": "string",
+      "title": "Upload folder(s)",
+      "description": "Only files inside these folders may be uploaded to Paperless by file path (post_document, upload_document_version); base64 uploads are not affected. Separate several folders with ; on Windows or : on macOS/Linux. Enter none to turn path uploads off completely. A folder that does not exist allows nothing, so create it first. Leaving this empty allows any file this computer can read (not recommended).",
+      "required": false,
+      "default": "${HOME}/PaperlessUpload"
     }
   },
   "compatibility": {
