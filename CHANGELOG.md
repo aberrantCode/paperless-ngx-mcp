@@ -9,6 +9,10 @@ All notable changes to this project are documented here. Format follows [Keep a 
 - **Behaviour change for `--http` outside Docker: the HTTP server now listens on `127.0.0.1` only.** It used to listen on every interface, and the port has no authentication. To accept connections from other machines again, pass `--host 0.0.0.0` or set `PAPERLESS_MCP_HOST=0.0.0.0`; the flag wins over the variable. The Docker image sets `PAPERLESS_MCP_HOST=0.0.0.0`, so containers behave as before. stdio mode is unaffected.
 - The startup message now shows the address as well as the port: `listening on http://127.0.0.1:3000`.
 
+### Fixed
+
+- **`npm test` ran no tests on Windows.** The `test` and `test:e2e` scripts quoted their glob with single quotes, which `cmd.exe` (npm's script shell on Windows) passes through literally, so Node matched no files and exited 0. The globs now use double quotes, which work in `cmd.exe` and POSIX shells; Node's test runner expands the glob itself.
+
 ### Security
 
 - Cleared all 11 `npm audit` advisories in production dependencies (1 critical, 5 high, 5 moderate) with `npm audit fix`. No `--force` and no breaking changes. The minimum versions of the three affected direct dependencies are raised so npm installs also get the patched versions:
