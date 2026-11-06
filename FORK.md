@@ -17,6 +17,7 @@ publish to npm, the MCP Registry or GHCR: `release.yml` only runs its publish jo
 | `fix/audit-deps` | `npm audit fix` for all production advisories; raises minimum versions of the affected direct dependencies. | [cubinet-code#7](https://github.com/cubinet-code/paperless-ngx-mcp/pull/7) |
 | `fix/http-bind-localhost` | `--http` binds `127.0.0.1` by default (`--host` / `PAPERLESS_MCP_HOST` to change; Docker image sets `0.0.0.0`); DNS-rebinding `Host` check on loopback. | [cubinet-code#8](https://github.com/cubinet-code/paperless-ngx-mcp/pull/8) |
 | `feat/upload-path-allowlist` | `PAPERLESS_UPLOAD_DIRS` / `--uploadDirs` limits which server-local paths the upload tools may read (`none` disables path reads; unset keeps upstream behaviour). | [cubinet-code#9](https://github.com/cubinet-code/paperless-ngx-mcp/pull/9) |
+| `fix/windows-test-glob` | `test` / `test:e2e` scripts double-quote their globs so `npm test` runs the tests on Windows (single quotes reached `node --test` literally via `cmd.exe`, matching 0 files and exiting 0). | _not yet opened_ |
 | `chore/fork-dependabot` | Dependabot config, `npm audit` step in CI, and a `github.repository` guard so the release workflow never publishes from the fork. | fork-only |
 
 Fork-only commits directly on `main` (not intended for upstream):
@@ -36,7 +37,7 @@ git checkout main
 git merge --no-ff upstream/main      # resolve conflicts; CHANGELOG keeps a single [Unreleased] section
 npm ci
 npm run build
-node --import tsx --test "src/**/*.test.ts"
+npm test                             # must report the full test count, not "tests 0"
 npm audit --omit=dev                 # must report 0 vulnerabilities
 git push origin main
 ```
